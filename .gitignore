@@ -1,0 +1,12 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Local data and model files
+*.csv
+*.joblib
+
+# Streamlit/IDE configurations
+.streamlit/
+.venv/
+.DS_Store
