@@ -79,12 +79,16 @@ with col1:
     st.dataframe(input_data, use_container_width=True)
 
 with col2:
-    # Calculate Prediction Probabilities
-    probabilities = model.predict_proba(input_data)[0]
-    risk_percentage = probabilities[1] * 100
-    
-    # Direct Output of the Risk Metric Card
-    st.metric(label="Mortality Risk Probability", value=f"{risk_percentage:.1f}%")
+    st.write("### Actions")
+    # Interactive Button logic
+    if st.button("Mortality Risk Probability", type="primary"):
+        # Calculate Prediction Probabilities only when clicked
+        probabilities = model.predict_proba(input_data)[0]
+        risk_percentage = probabilities[1] * 100
+        
+        # Display the calculation results
+        st.write("")
+        st.metric(label="Calculated Probability Result", value=f"{risk_percentage:.1f}%")
 
 # --- Footnote Section ---
 st.divider()
