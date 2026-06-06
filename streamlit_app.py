@@ -5,7 +5,7 @@ import joblib
 from data_loader import load_heart_data
 from model import train_and_save_model
 
-# Page config configuration
+# Page configuration
 st.set_page_config(
     page_title="Heart Failure Risk Predictor",
     page_icon="❤️",
@@ -56,7 +56,6 @@ st.sidebar.subheader("Timeline")
 time = st.sidebar.slider("Follow-up Window Period (Days)", min_value=1, max_value=300, value=45, step=1)
 
 # --- Process User Inputs ---
-# Convert UI labels back to 1s and 0s mapped to the model's training columns
 input_data = pd.DataFrame([{
     'age': float(age),
     'anaemia': 1 if anaemia == "Yes" else 0,
@@ -72,8 +71,7 @@ input_data = pd.DataFrame([{
     'time': int(time)
 }])
 
-# --- Main Page Dashboard layout ---
-col1, col2 = pd.DataFrame().columns, pd.DataFrame().columns # Placeholder check
+# --- Main Page Dashboard Layout ---
 col1, col2 = st.columns([2, 1])
 
 with col1:
@@ -81,22 +79,12 @@ with col1:
     st.dataframe(input_data, use_container_width=True)
 
 with col2:
-    st.subheader("Prediction Evaluation")
-    
-    # Calculate Prediction & Probabilities
-    prediction = model.predict(input_data)[0]
+    # Calculate Prediction Probabilities
     probabilities = model.predict_proba(input_data)[0]
     risk_percentage = probabilities[1] * 100
     
-    # Display visually structured metrics blocks
-    if prediction == 1:
-        st.error(f"⚠️ **High Risk Group Detected**")
-        st.metric(label="Mortality Risk Probability", value=f"{risk_percentage:.1f}%")
-        st.write("The model indicates an elevated risk profile within this tracking window. Close clinical monitoring is advised.")
-    else:
-        st.success(f"✅ **Low Risk Group Detected**")
-        st.metric(label="Mortality Risk Probability", value=f"{risk_percentage:.1f}%")
-        st.write("The patient displays parameters that historical records correlate with high survival tracking probabilities.")
+    # Direct Output of the Risk Metric Card
+    st.metric(label="Mortality Risk Probability", value=f"{risk_percentage:.1f}%")
 
 # --- Footnote Section ---
 st.divider()
